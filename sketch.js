@@ -21,9 +21,21 @@ var sw1 = fxrandRange(0.1, 0.5, 0.1);
 var sw2 = fxrandRange(0.1, 0.5, 0.1);
 var mes1a = fxrandRange(0.1, 4, 0.1);
 var mes2a = fxrandRange(0.1, 8, 0.1);
+var sizeRNG;
+
+function resetSizeSeed() {
+  if (typeof sfc32 === "function" && typeof hashes !== "undefined") {
+    fxrand = sfc32(...hashes);
+  }
+}
+
+function seededRand() {
+  return fxrand();
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  resetSizeSeed();
 
   cols = floor(windowWidth / scl);
   rows = floor(windowHeight / scl);
@@ -75,10 +87,10 @@ function draw() {
     var xoff = 0;
     for (var x = 0; x < cols; x++) {
       var index = x + y * cols;
-      flowfield[index] = v;
       var angle = fxrand() * xoff * yoff;
       var v = p5.Vector.fromAngle(angle);
       v.setMag(magv);
+      flowfield[index] = v;
       xoff += inc;
       // stroke(255, 130);
       // push();
@@ -131,13 +143,32 @@ function draw() {
   indexk = indexk + 1;
   //console.log(indexk);
 }
-function windowResized() {
+function randomizeStyleValues() {
+  inc = fxrandRange(1, 5, 0.1);
+  scl = fxrandRange(20, 120, 1);
+  magv = fxrandRange(0.1, 10, 0.1);
+  cr = fxrandRange(200, 255, 1);
+  cg = fxrandRange(100, 110, 1);
+  cb = fxrandRange(200, 250, 1);
+  dr = fxrandRange(0, 100, 1);
+  dg = fxrandRange(150, 200, 1);
+  db = fxrandRange(10, 150, 1);
+  sw1 = fxrandRange(0.1, 0.5, 0.1);
+  sw2 = fxrandRange(0.1, 0.5, 0.1);
+  mes1a = fxrandRange(0.1, 4, 0.1);
+  mes2a = fxrandRange(0.1, 8, 0.1);
+}
+
+function restart(randomize) {
+  if (randomize) {
+    randomizeStyleValues();
+  }
   resizeCanvas(windowWidth, windowHeight);
+  resetSizeSeed();
   indexk = 0;
   loop();
   cols = floor(windowWidth / scl);
   rows = floor(windowHeight / scl);
-  //fr = createP("");
   flowfield = new Array(cols * rows);
 
   for (i = 0; i < 100; i++) {
@@ -178,24 +209,22 @@ function windowResized() {
   background(0);
   rectMode(RADIUS);
   fill(0);
-  //fill(alpha(50));
   rect(
     windowWidth / 2,
     windowHeight / 2,
     windowWidth / 2 - 30,
     windowHeight / 2 - 30
   );
-
   rectMode(RADIUS);
-  //fill(0, 1 * sin(millis() * 1000));
-  // noStroke();
-  // rect(
-  //   windowWidth / 2,
-  //   windowHeight / 2,
-  //   windowWidth / 2 - 30,
-  //   windowHeight / 2 - 30
-  // );
   pop();
+}
+
+function windowResized() {
+  restart(false);
+}
+
+function mousePressed() {
+  restart(true);
 }
 
 function fxrandRange(min, max, step) {

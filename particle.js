@@ -43,19 +43,19 @@ function Particle(r, g, b, x, y, stw) {
   };
   this.edges = function () {
     if (this.pos.x > windowWidth - 30) {
-      this.pos.x = 30;
-      this.updatePrev();
-    }
-    if (this.pos.x < 30) {
-      this.pos.x = windowWidth - 30;
-      this.updatePrev();
-    }
-    if (this.pos.y > windowHeight - 30) {
       this.pos.y = 30;
       this.updatePrev();
     }
+    if (this.pos.x < 30) {
+      this.pos.y = windowWidth - 30;
+      this.updatePrev();
+    }
+    if (this.pos.y > windowHeight - 30) {
+      this.pos.x = 30;
+      this.updatePrev();
+    }
     if (this.pos.y < 30) {
-      this.pos.y = windowHeight - 30;
+      this.pos.x = windowHeight - 30;
       this.updatePrev();
     }
   };
@@ -196,26 +196,26 @@ function Particle3(r, g, b, x, y, stw, spd) {
   };
   this.edges = function () {
     if (this.pos.x > windowWidth - 30) {
-      this.pos.y = 30;
-      this.updatePrev();
-    }
-    if (this.pos.x < 30) {
-      this.pos.y = windowWidth - 30;
-      this.updatePrev();
-    }
-    if (this.pos.y > windowHeight - 30) {
       this.pos.x = 30;
       this.updatePrev();
     }
+    if (this.pos.x < 30) {
+      this.pos.x = windowWidth - 30;
+      this.updatePrev();
+    }
+    if (this.pos.y > windowHeight - 30) {
+      this.pos.y = 30;
+      this.updatePrev();
+    }
     if (this.pos.y < 30) {
-      this.pos.x = windowHeight - 30;
+      this.pos.y = windowHeight - 30;
       this.updatePrev();
     }
   };
   this.follow = function (vectors) {
     var x = floor(this.pos.x / scl);
     var y = floor(this.pos.y / scl);
-    var index = x + y * rows;
+    var index = x + y * cols;
     var force = vectors[index];
     this.applyForce(force);
   };
